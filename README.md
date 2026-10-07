@@ -1,6 +1,7 @@
 # QubeResearch: a hierarchical Bayesian model for next-day portfolio returns
 
-[![CI](https://github.com/MarcoGaloppo/QubeResearch/actions/workflows/ci.yml/badge.svg)](https://github.com/MarcoGaloppo/QubeResearch/actions/workflows/ci.yml)
+[![CI](https://github.com/MarcoGaloppo/QubeResearch/actions/workflows/ci.yml/badge.svg)](https://github.com/MarcoGaloppo/QubeResearch/actions/workflows/ci.yml) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 My solution to the **QRT Challenge Data #167, "Asset Allocation Performance forecasting"**
 ([challengedata.ens.fr/challenges/167](https://challengedata.ens.fr/challenges/167)).
@@ -19,7 +20,7 @@ These come from a honest cross-validation with 5 folds, holding out whole recons
 | always predict "up" (base rate) | 0.5072 |
 | sign of yesterday's return | 0.5189 |
 | pooled OLS (one set of coefficients for all portfolios) | 0.5195 |
-| **hierarchical Bayesian model (HBM)** | **0.5234** |
+| **Hierarchical Bayesian Model (HBM)** | **0.5234** |
 
 - **Edge over the base rate:** +2.2 points, z = 9.5 (per-date paired test).
 - **Value of the hierarchy over pooled OLS:** +0.46 points, **z = 3.4** with a block bootstrap
