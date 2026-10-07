@@ -37,7 +37,7 @@ the training dates into stretches of consecutive days.
 4. **The model.** We adopt a student-t regression with a per-group tail index ν, coupled with portfolio coefficients pooled towards group and global centres. To wit,
 
    $$y_i = Z_i\cdot\theta_p + \sigma_p\,\epsilon_i,\quad \epsilon_i\sim t_{\nu_g},\qquad
-   \theta_p\sim\mathcal N(\theta_g,\ \mathrm{diag}\,\tau^2),\quad \theta_g\sim\mathcal N(\theta_0,\ \mathrm{diag}\,\omega^2)\,.$$
+   \theta_p\sim\mathcal N(\theta_g,\ \mathrm{diag}\,\tau^2),\quad \theta_g\sim\mathcal N(\theta_0,\ \mathrm{diag}\,\omega^2) .$$
 
    This is fitted with a hand-written **Gibbs sampler** (numpy/scipy only). To do so, the Student-t is written as a scale mixture of Gaussians, and ν is updated with a collapsed Metropolis step. Four chains from different starting values converge rapidly (R̂ < 1.01).
 
