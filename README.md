@@ -1,4 +1,4 @@
-# QubeResearch: a hierarchical Bayesian model for next-day portfolio returns
+#  QRT: a hierarchical Bayesian model for next-day portfolio returns
 
 [![CI](https://github.com/MarcoGaloppo/QubeResearch/actions/workflows/ci.yml/badge.svg)](https://github.com/MarcoGaloppo/QubeResearch/actions/workflows/ci.yml) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
