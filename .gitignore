@@ -6,3 +6,7 @@
 /y_train.csv
 /train_sorted.pkl
 /submission_hbm.csv
+/oof_multi-scale.npy
+/oof_no-pool.npy
+/oof_vanilla.npy
+/oof_volume-aware.npy

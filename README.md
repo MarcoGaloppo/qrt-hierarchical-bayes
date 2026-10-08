@@ -47,6 +47,7 @@ the training dates into stretches of consecutive days.
   (about $4\sigma$) in-sample, it is too small to flip sign calls. In the end the CV gain is about 0 points. Dropped.
 - **Time-varying coefficients (THBM).** The plan was to use "pseudo-rows" built from the test
   windows' own history. They turned out to be structurally biased against real outcomes, and with a non-trivially structured bias at that. A first calibrated correction gained only +0.08 points at 1.7σ, so it is not worth the extra assumptions. Dropped.
+- **1D CNNs on the 20-day history** ([`CNNApproach.ipynb`](CNNApproach.ipynb)). Four architectures,  conditioned on group and portfolio through FiLM layers. The best (vanilla) reaches 0.5202, i.e., 0.32 points below the HBM, and beats it on only 1 fold out of 5. A CNN alone does not do better than the HBM.
 
 ## How to run
 
@@ -62,19 +63,24 @@ the MCMC fits and the cross-validation.
 
 ## Continuous integration
 
-The notebook can't be executed in CI without the (non-redistributable) data. On every push and
+The notebooks can't be executed in CI without the (non-redistributable) data. On every push and
 pull request, GitHub Actions instead runs static checks
 ([`.github/scripts/check_notebook.py`](.github/scripts/check_notebook.py)):
 
-- the notebook is a valid Jupyter notebook;
+- each notebook is a valid Jupyter notebook;
 - every code cell is valid Python;
 - all imported libraries install from `requirements.txt`;
 - no challenge data files, and no files over 50 MB, are committed.
+
+It also runs unit tests of `cnn_utils.py` on synthetic data ([`tests/`](tests/)).
 
 ## Repository structure
 
 ```
 BaysianHierarchicalApproach.ipynb   the full analysis
+CNNApproach.ipynb                   CNN side-study
+cnn_utils.py                        code shared by the CNN notebook
+tests/test_cnn_utils.py             unit tests of cnn_utils.py
 requirements.txt                    Python dependencies
 .github/workflows/ci.yml            CI workflow
 .github/scripts/check_notebook.py   CI checks

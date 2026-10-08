@@ -1,10 +1,10 @@
-"""Static checks for the analysis notebook (run in CI).
+"""Static checks for the analysis notebooks (run in CI).
 
-The notebook needs the challenge data, which cannot be redistributed, so CI does not
-execute it. Instead it checks that:
-  1. the notebook is a valid Jupyter notebook (nbformat schema);
+The notebooks need the challenge data, which cannot be redistributed, so CI does not
+execute them. Instead it checks that:
+  1. each notebook is a valid Jupyter notebook (nbformat schema);
   2. every code cell is valid Python;
-  3. the libraries it imports are installable from requirements.txt;
+  3. the libraries they import are installable from requirements.txt;
   4. the challenge data files are not committed to the repository.
 """
 import ast
@@ -15,31 +15,34 @@ from pathlib import Path
 
 import nbformat
 
-NOTEBOOK = Path("BaysianHierarchicalApproach.ipynb")
+NOTEBOOKS = [Path("BaysianHierarchicalApproach.ipynb"), Path("CNNApproach.ipynb")]
 LIBRARIES = ["numpy", "pandas", "scipy", "scipy.spatial", "scipy.special", "scipy.stats",
-             "sklearn.model_selection", "matplotlib.pyplot"]
+             "sklearn.model_selection", "sklearn.metrics", "matplotlib.pyplot",
+             "torch", "torch.nn", "torch.utils.data"]
 DATA_FILES = {"X_train.csv", "X_test.csv", "y_train.csv"}
 MAX_FILE_MB = 50
 
 failures = []
 
-# 1. valid notebook
-nb = nbformat.read(NOTEBOOK, as_version=4)
-try:
-    nbformat.validate(nb)
-    print(f"[ok] {NOTEBOOK} is a valid notebook ({len(nb.cells)} cells)")
-except nbformat.ValidationError as e:
-    failures.append(f"invalid notebook: {e}")
-
-# 2. every code cell parses
-code_cells = [(i, c) for i, c in enumerate(nb.cells) if c.cell_type == "code"]
-for i, cell in code_cells:
-    src = "\n".join(l for l in cell.source.splitlines() if not l.lstrip().startswith(("%", "!")))
+for notebook in NOTEBOOKS:
+    # 1. valid notebook
+    nb = nbformat.read(notebook, as_version=4)
     try:
-        ast.parse(src)
-    except SyntaxError as e:
-        failures.append(f"cell {i}: syntax error at line {e.lineno}: {e.msg}")
-print(f"[ok] parsed {len(code_cells)} code cells" if not failures else "[!!] syntax errors found")
+        nbformat.validate(nb)
+        print(f"[ok] {notebook} is a valid notebook ({len(nb.cells)} cells)")
+    except nbformat.ValidationError as e:
+        failures.append(f"{notebook}: invalid notebook: {e}")
+
+    # 2. every code cell parses
+    n_before = len(failures)
+    code_cells = [(i, c) for i, c in enumerate(nb.cells) if c.cell_type == "code"]
+    for i, cell in code_cells:
+        src = "\n".join(l for l in cell.source.splitlines() if not l.lstrip().startswith(("%", "!")))
+        try:
+            ast.parse(src)
+        except SyntaxError as e:
+            failures.append(f"{notebook} cell {i}: syntax error at line {e.lineno}: {e.msg}")
+    print(f"[ok] parsed {len(code_cells)} code cells" if len(failures) == n_before else "[!!] syntax errors found")
 
 # 3. imports resolve
 for lib in LIBRARIES:
