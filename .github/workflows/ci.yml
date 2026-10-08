@@ -18,7 +18,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt nbformat
+          pip install torch --index-url https://download.pytorch.org/whl/cpu   # CPU wheel, no CUDA
+          pip install -r requirements.txt nbformat pytest
 
-      - name: Static checks on the notebook and the repository
+      - name: Static checks on the notebooks and the repository
         run: python .github/scripts/check_notebook.py
+
+      - name: Unit tests of cnn_utils.py on synthetic data
+        run: python -m pytest tests -q
